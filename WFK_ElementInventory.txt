@@ -1,0 +1,116 @@
+Element Type	Element Name
+Subbasin	Harrison Creek D
+Subbasin	Harrison Creek A
+Subbasin	Harrison Creek B
+Reach	HC A - HC B
+Reach	HC B- HC C
+Subbasin	Harrison Creek C
+Reach	HC C - Junction
+Reach	HC D - Junction
+Junction	HC C & HC D
+Reach	HC C&D - HC E
+Subbasin	Harrison Creek E
+Subbasin	Bishop A
+Subbasin	West _Fork Kickapoo 17
+Reach	WFK 17 - Junction
+Reach	B A - Junction
+Junction	B A & WFK 17
+Reach	B A & WFK 17 - B B
+Subbasin	Bishop B
+Reach	B B - B C
+Subbasin	Bishop C
+Subbasin	West Fork Kickapoo F
+Subbasin	West Fork Kickapoo C
+Subbasin	West Fork Kickapoo D
+Subbasin	West Fork Kickapoo A
+Subbasin	West _Fork Kickapoo 4
+Reach	WFK 4 - Junction
+Subbasin	West Fork Kickapoo 5
+Reach	WFK 5 - Junction
+Junction	WFK 4 & WFK 5
+Subbasin	Knapp Creek - WFK M
+Subbasin	Knapp Creek - WFK J
+Subbasin	Knapp Creek - WFK L
+Subbasin	West Fork Kickapoo 12
+Reach	WFK 12 - KC WFK L
+Subbasin	Knapp Creek - WFK F
+Subbasin	WEST FORK KICKAPOO 3
+Reach	WFK 3 - KC WFK F
+Subbasin	MLSNA
+Subbasin	KLINKNER
+Reach	Klinkner - Junction
+Reach	Mlsna - Junction
+Junction	Mlsna & Klinkner
+Reach	Junction - KC WFK A
+Subbasin	Knapp Creek - WFK A
+Reach	KC WFK A - KC WFK B
+Subbasin	Knapp Creek - WFK B
+Subbasin	Knapp Creek - WFK C
+Subbasin	WEST FORK KICKAPOO 1
+Reach	WFK 1 - Junction
+Reach	KC WFK C - Junction
+Junction	WFK 1 & KC WFK C
+Reach	Junction - KC WFK D
+Subbasin	Knapp Creek - WFK D
+Reach	KC WFK D - Junction
+Reach	KC WFK B - Junction
+Junction	KC WFK B & D
+Reach	Junction - KC WFK E
+Subbasin	West Fork Kickapoo 16
+Reach	WFK16 - KC WFK E
+Subbasin	Knapp Creek - WFK E
+Junction	WFK 16 & KC WFK E
+Reach	KC WFK E - Junction
+Reach	KC WFK F - Junction
+Junction	KC WFK E & KC WFK F
+Reach	Junction - Junction
+Subbasin	Knapp Creek - WFK G
+Junction	KC WFK G & Junction
+Reach	Junction - KC WFK H
+Subbasin	Knapp Creek - WFK I
+Subbasin	Knapp Creek - WFK H
+Reach	KC WFK H & I - Junction
+Reach	KC WFK L - Junction
+Junction	KC WFK L & Junction
+Reach	Junction- Junction (KCWFK K)
+Reach	KC WFK J - Junction
+Junction	KC WFK J & Junction
+Reach	Junction 2- Junction 3
+Reach	KC WFK M - Junction
+Junction	KC WFK M & Junction
+Reach	Junction - KC WFK K
+Reach	Junction - SB
+Subbasin	Seas Branch
+Subbasin	Knapp Creek - WFK K
+Junction	SB & KC WFK
+Reach	Seas & KC WFK - WFK B
+Reach	WFK A - Junction
+Junction	WFK A & WFK B
+Reach	WFK B Junctions
+Subbasin	West Fork Kickapoo B
+Reach	WFK D - Junction
+Junction	WFK D & B
+Reach	WFK B - Junction
+Reach	WFK C - Junction
+Junction	WFK C & E
+Reach	Junction - WFK E
+Reach	WFK F - Junction
+Subbasin	West Fork Kickapoo E
+Junction	WFK F & E
+Reach	Junction - WFK G
+Reach	B C - B D
+Subbasin	West Fork Kickapoo G
+Subbasin	Bishop D
+Junction	B D & WFK G
+Reach	Junction - Junction - WFK H
+Subbasin	West Fork Kickapoo I
+Reach	WFK I - Junction
+Junction	WFK I & B D
+Reach	Junction - WFK H
+Subbasin	West Fork Kickapoo H
+Reach	WFK H - Junction
+Reach	HC E  - Junction
+Junction	HC E & WFK H
+Reach	Junction - Outflow
+Subbasin	West Fork Kickapoo J
+Junction	Outflow

@@ -1,0 +1,126 @@
+Element Type	Element Name
+Subbasin	Lower Coon Creek I
+Subbasin	Lower Coon Creek C
+Subbasin	Lower Coon Creek A
+Subbasin	Middle Coon Creek N
+Subbasin	Middle Coon Creek B
+Subbasin	Middle Coon Creek A
+Reach	MCC A - MCC B
+Reach	MCC B MCC C
+Subbasin	Middle Coon Creek C
+Reach	MCC C - MCC D
+Subbasin	Middle Coon Creek D
+Reach	MCC D - MCC E
+Subbasin	Middle Coon Creek E
+Subbasin	COON CREEK 41
+Subbasin	COON CREEK 15
+Subbasin	COON CREEK 16
+Subbasin	COON CREEK 17
+Reach	CC 17 - Junction
+Reach	CC16 - Junction
+Junction	CC16 & 17
+Reach	TC B Reach 1
+Reach	CC15 - Junction
+Junction	CC15
+Reach	TC B reach 2
+Reach	CC 41 - Junction
+Junction	CC41
+Reach	TC B Reach 3
+Subbasin	COON CREEK 14
+Reach	CC 14 - Junction
+Junction	CC14
+Reach	TC B Reach 4
+Subbasin	Timber Coulee B
+Subbasin	COON CREEK 21
+Subbasin	COON CREEK 23
+Reach	CC23 - Junction
+Subbasin	COON CREEK 24
+Reach	CC24 - Junction
+Junction	CC24 & CC23
+Reach	Junction - Junction TC A
+Subbasin	COON CREEK 25
+Reach	CC25 - Junction
+Junction	CC25 & Junction
+Reach	Junction - TC A
+Subbasin	Timber Coulee A
+Reach	CC21 - TC A
+Junction	TC A out
+Reach	TC A - TC C
+Reach	TC B - D
+Subbasin	Timber Coulee C
+Subbasin	Timber Coulee D
+Junction	TC C & D
+Reach	Junction - TC F
+Subbasin	Timber Coulee F
+Subbasin	Timber Coulee E
+Subbasin	COON CREEK 53
+Reach	CC53 - TC E
+Junction	TC E & F
+Reach	Junction - TC G
+Subbasin	COON CREEK 35
+Subbasin	COON CREEK 29
+Subbasin	COON CREEK 31
+Reach	CC31 - CC29
+Reach	CC29 - UCC A
+Subbasin	Upper Coon Creek A
+Subbasin	COON CREEK 33
+Reach	CC33 - UCC A
+Junction	CC 33 & 29
+Reach	UCC A - B
+Subbasin	Upper Coon Creek B
+Reach	UCC B - C
+Subbasin	Upper Coon Creek C
+Reach	UCC C - Junction
+Reach	CC35 - Junction
+Junction	CC35 & UCC C
+Reach	Junction - UCC D
+Subbasin	Timber Coulee G
+Subbasin	Upper Coon Creek D
+Junction	UCC D & TC G
+Reach	UCC & TC - Junction
+Junction	MCC G & H
+Subbasin	Middle Coon Creek G
+Reach	MCC H reach 1
+Reach	MCC E - MCC F
+Subbasin	Middle Coon Creek F
+Junction	MCC F & MCC H
+Reach	MCC H Reach 2
+Subbasin	Middle Coon Creek J
+Junction	MCC J & H
+Reach	MCC H Reach 3
+Subbasin	Middle Coon Creek I
+Subbasin	Middle Coon Creek H
+Junction	MCC I & H
+Reach	MCC I & H - MCC K
+Subbasin	Middle Coon Creek K
+Subbasin	Middle Coon Creek L
+Junction	MCC L & K
+Reach	MCC O Upper
+Subbasin	Middle Coon Creek M
+Junction	MCC M & O
+Reach	Junction - MCC O
+Reach	MCC N - MCC P
+Subbasin	Middle Coon Creek O
+Subbasin	Middle Coon Creek P
+Junction	MCC O & P
+Reach	Junction - LCC B
+Subbasin	Lower Coon Creek B
+Reach	LCC B - D
+Reach	LCC C - Junction
+Subbasin	Lower Coon Creek D
+Junction	LCC C & D
+Reach	Junction - LCC F
+Subbasin	Lower Coon Creek F
+Subbasin	Lower Coon Creek E
+Junction	LCC F & E
+Reach	Junction - LCC G
+Subbasin	Lower Coon Creek G
+Reach	LCC g - LCC H
+Subbasin	Lower Coon Creek H
+Reach	LCC H - Junction
+Reach	Lower CC I into J
+Junction	LCC I & LCC H
+Reach	Junction - LCC J
+Subbasin	Lower Coon Creek J
+Reach	LCC A - LCC C
+Junction	Out

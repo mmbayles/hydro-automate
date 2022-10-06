@@ -1,0 +1,31 @@
+from hms.model.JythonHms import *
+
+OpenProject("WFK_2yrStorm", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_2yrStorm")
+Compute("MSE4 No Dams")
+
+
+#OpenProject("WFK_5yrStorm", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_5yrStorm")
+#Compute("MSE4 No Dams")
+
+
+#OpenProject("WFK_10yrStorm", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_10yrStorm")
+#Compute("MSE4 No Dams")
+
+
+#OpenProject("WFK_25yrStorm", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_25yrStorm")
+#Compute("MSE4 No Dams")
+
+
+OpenProject("WFK_50yrStorm", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_50yrStorm")
+Compute("MSE4 No Dams")
+
+OpenProject("West_Fork_Kickapoo_100yrSto", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_100yrStorm")
+Compute("MSE4 No Dams")
+
+OpenProject("WFK_200yrStorm", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_200yrStorm")
+Compute("MSE4 No Dams")
+
+
+OpenProject("WFK_500yrStorm", "C:\\Users\\paige\\OneDrive\\Documents\\HMS_WFK_Final\\WFK_500yrStorm")
+Compute("MSE4 No Dams")
+Exit(1)
