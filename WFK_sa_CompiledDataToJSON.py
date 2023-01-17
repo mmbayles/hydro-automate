@@ -11,16 +11,13 @@ from datetime import datetime
 import reach_station_lookup
 
 #usage: pull together all pertinent data from .dss files (time series, Qmax, calculated WSE) with the support of Qmax~WSE correlations compiled from RAS, and HMS reach~RAS station correlations compiled manually
-
 #SET UP DICTIONARY OF ARRAYS HOLDING QMAX, WSE, SLOPE & INTERCEPT /STATION /STORM
 
 #bring in compiled .csv (UTF-8) file of Peak Flow ~ WSE correlations, exported from RAS summary table and keep only 
 #reach, river station, profile, Q Total and W.S. Elev columns;
 #.csv should have no extra spaces, keep headings
-with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\PeakFlow_WSE_Correlations_RiverStations_CC_081722.csv",'r') as f:
+with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\PeakFlow_WSE_Correlations_RiverStations_WFK_090722.csv",'r') as f:
         fdata = f.read()
-reaches = re.findall(r"\n(.*?)\,",fdata)
-reaches = list(OrderedDict.fromkeys(reaches)) #to remove duplicates and maintain order
 stations = re.findall(r"\n.*?,(.*?),.*?,.*?,\d*.\d*",fdata) #regex structured this way to toss the culvert
 stations = list(OrderedDict.fromkeys(stations)) #to remove duplicates and maintain order
 q_max = re.findall(r"\n.*?,.*?,.*?,(\d*.\d*)\,",fdata)
@@ -47,131 +44,135 @@ for station in range(len(stations)):
                    [q_max[i+6],wse[i+6],slope(q_max[i+5],q_max[i+6],wse[i+5],wse[i+6]),intercept(q_max[i+5],q_max[i+6],wse[i+5],wse[i+6])],
                   [q_max[i+7],wse[i+7],slope(q_max[i+6],q_max[i+7],wse[i+6],wse[i+7]),intercept(q_max[i+6],q_max[i+7],wse[i+6],wse[i+7])]))
     i = i+8
+    
+#DEFINE HMS REACHES TO PULL TIME SERIES DATA FROM DSS VUE (pulled from hms_reach from proof. 
+#naming is case insensitive. requires some manual adjustments because HMS cuts off names)
 
-#DEFINE HMS REACHES TO PULL TIME SERIES DATA FROM DSS VUE, DEFINE KEY RAS STATIONS TO SUPPORT LOOPS
-with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\HMS_RAS_NetworkCorrelation_CC_08232022.csv",'r') as f:
+# #KEY STATION ~ HMS REACH LOOKUP
+# #proofs for development of following lists are in proofs.ipynb
+with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\HMS_RAS_NetworkCorrelation_WFK_090722.csv",'r') as f:
         fdata = f.read()        
 reaches = re.findall(r"\n.*?,.*?,.*?,.*?(.*?)\,",fdata)
 key_station = re.findall(r"\n.*?,.*?,.*?,.*?,.*?(.*?)\,",fdata)
 key_station = [float(x) for x in key_station]
 
 #KEY STATION ~ HMS REACH LOOKUP
-CC = reach_station_lookup.Watershed('CC') #usage: CC.get_reach(station) or CC.get_station('reach')
-
+WFK = reach_station_lookup.Watershed('WFK') #usage: WFK.get_reach(station) or WFK.get_station('reach')
 
 #PULL EXPERIMENTAL DATA FROM DSS VUE; SWAP HMS REACH FOR RAS STATION IDENTIFIER
 #2 year data
 dict_of_stations_2yr = {}
 dict_of_stations_max_2yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\2yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\2yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_2yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_2yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_2yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_2yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
 
 #5 year data
 dict_of_stations_5yr = {}
 dict_of_stations_max_5yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\5yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\5yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_5yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_5yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_5yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_5yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
 
 #10 year data
 dict_of_stations_10yr = {}
 dict_of_stations_max_10yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\10yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\10yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_10yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_10yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_10yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_10yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
     
 #25 year data
 dict_of_stations_25yr = {}
 dict_of_stations_max_25yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\25yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\25yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_25yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_25yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_25yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_25yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
     
 #50 year data
 dict_of_stations_50yr = {}
 dict_of_stations_max_50yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\50yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\50yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_50yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_50yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_50yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_50yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
 
 #100 year data
 dict_of_stations_100yr = {}
 dict_of_stations_max_100yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\100yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\100yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_100yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_100yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_100yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_100yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
     
 #200 year data
 dict_of_stations_200yr = {}
 dict_of_stations_max_200yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\200yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\200yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_200yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_200yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_200yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_200yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
     
 #500 year data
 dict_of_stations_500yr = {}
 dict_of_stations_max_500yr = {}
 for reach in range(len(reaches)):
-    with open(r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final\TimeSeriesData\500yr_{}.txt".format(reaches[reach]),'r') as f: 
+    with open(r"C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\TimeSeriesData\500yr_{}.txt".format(reaches[reach]),'r') as f: 
         fdata = f.read() 
     day = re.findall(r"\d{2}\s\w{3}\s\d{4}",fdata)
     time = re.findall(r"\d\d:\d\d",fdata)
     cfs = re.findall(r"\d\d:\d\d,(\d*)",fdata)
     cfs = [float(x) for x in cfs]
     cfs_max = max(cfs)
-    dict_of_stations_500yr[f"{CC.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
-    dict_of_stations_max_500yr[f"{CC.get_station(f'{reaches[reach]}')}"] = cfs_max
+    dict_of_stations_500yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = {'day range':'01/01/2021-01/04/2021', 'time step':'5min', 'cfs':cfs}
+    dict_of_stations_max_500yr[f"{WFK.get_station(f'{reaches[reach]}')}"] = cfs_max
 
+    
 #WSE CALCULATION
 #create some useful elements to make looping easier
 storms = ['2yr', '5yr', '10yr','25yr', '50yr', '100yr', '200yr', '500yr']
@@ -181,7 +182,7 @@ dict_of_stations_max_names = {0:dict_of_stations_max_2yr, 1:dict_of_stations_max
 
 calc_wse = {'2yr':{}, '5yr':{}, '10yr':{}, '25yr':{}, '50yr':{},'100yr':{}, '200yr':{}, '500yr':{}}
 for storm in range(len(dict_of_stations_max_names)): #8 instances
-    for station in range(len(key_station)): #51 instances
+    for station in range(len(key_station)): #42 instances
         #under 2yr Qmax
         if dict_of_stations_max_names[storm][f'{key_station[station]}'] <= qmax_wse[f'{key_station[station]}'][0,0]:
             statement = 'Warning: Max flow is under model parameters'
@@ -212,412 +213,421 @@ for storm in range(len(dict_of_stations_max_names)): #8 instances
             statement = 'Warning: Max flow is above model parameters; 200yr to 500yr rating curve applied to flow'
             calc_wse[f'{storms[storm]}'][f'{key_station[station]}'] = qmax_wse[f'{key_station[station]}'][7,2] * dict_of_stations_max_names[storm][f'{key_station[station]}'] + qmax_wse[f'{key_station[station]}'][7,3] # y=mx+b
             
+            
 #COMPILE ALL INFO TO JSON
 #set up dictionary to be populated
-CompiledRiverStationData = {'2yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}},'5yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}},'10yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}},'25yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}},'50yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}},'100yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}},'200yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}},'500yr':{'19036.03':{},
- '8797.13':{},
- '7622.34':{},
- '19040.92':{},
- '9494.62':{},
- '590.65':{},
- '4466.19':{},
- '13430.16':{},
- '4359.26':{},
- '2641.32':{},
- '4527.34':{},
- '1232.49':{},
- '4267.35':{},
- '11625.38':{},
- '12950.3':{},
- '3627.17':{},
- '2790.94':{},
- '1662.23':{},
- '4921.17':{},
- '951.5':{},
- '3418.18':{},
- '5245.34':{},
- '2493.1':{},
- '15665.35':{},
- '13560.94':{},
- '8087.76':{},
- '12141.36':{},
- '15400.45':{},
- '12796.04':{},
- '10042.47':{},
- '38709.59':{},
- '30033.24':{},
- '25620.54':{},
- '19971.03':{},
- '15297.72':{},
- '38559.55':{},
- '34219.34':{},
- '30304.08':{},
- '19464.66':{},
- '8144.88':{},
- '16229.51':{},
- '23137.98':{},
- '16878.2':{},
- '7795.3':{},
- '682.18':{},
- '48139.2':{},
- '27159.3':{},
- '19607.41':{},
- '6114.88':{},
- '578.15':{},
- '10184.34':{}}}
+CompiledRiverStationData = {'2yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}},'5yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}},'10yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}},'25yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}},'50yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}},'100yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}},'200yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}},'500yr':{'5075.74':{},
+ '4688.81':{},
+ '21459.97':{},
+ '18520.11':{},
+ '9044.28':{},
+ '4683.66':{},
+ '1299.05':{},
+ '6131.81':{},
+ '2722.88':{},
+ '2945.19':{},
+ '5429.81':{},
+ '1689.83':{},
+ '12749.08':{},
+ '5350.41':{},
+ '10798.11':{},
+ '6346.46':{},
+ '2417.83':{},
+ '6721.04':{},
+ '1933.21':{},
+ '6000.33':{},
+ '3277.91':{},
+ '4687.52':{},
+ '3751.15':{},
+ '5128.21':{},
+ '4660.94':{},
+ '2048.78':{},
+ '11827.62':{},
+ '1446.65':{},
+ '5600.6':{},
+ '15905.06':{},
+ '1052.29':{},
+ '3338.29':{},
+ '5313.02':{},
+ '5325.85':{},
+ '3737.3':{},
+ '13383.6':{},
+ '2334.44':{},
+ '1020.65':{},
+ '29422.32':{},
+ '23916.11':{},
+ '15699.21':{},
+ '3134.44':{},
+ '2179.29':{},
+ '23321.9':{},
+ '16392.48':{},
+ '20307.34':{},
+ '11361.86':{},
+ '1690.2':{},
+ '2432.4':{},
+ '10964.2':{},
+ '9033.32':{},
+ '4276.96':{}}}
 
-
-for station in range(len(key_station)): #51 instances
+#for storm in range(len(dict_of_stations_max_names)): #8 instances
+for station in range(len(key_station)): #42 instances
     CompiledRiverStationData['2yr'][f'{key_station[station]}']['time series'] = dict_of_stations_2yr[f'{key_station[station]}']
     CompiledRiverStationData['2yr'][f'{key_station[station]}']['Qmax'] = dict_of_stations_max_2yr[f'{key_station[station]}']
     CompiledRiverStationData['2yr'][f'{key_station[station]}']['WSE'] = calc_wse['2yr'][f'{key_station[station]}']
@@ -656,6 +666,6 @@ date = datetime.today()
 date = date.strftime("%d%m%Y_%H%M%S")
 
 # Writing to sample.json
-from CC_SA_Master_WorkflowTrigger import JSON_name_ext
-with open(r'C:\Users\paige\OneDrive\Documents\HMS_CC_Final\{}_CompiledRiverStationData_{}.json'.format(JSON_name_ext,date), "w") as outfile:
+from WFK_SA_Master_WorkflowTrigger import JSON_name_ext
+with open(r'C:\Users\paige\OneDrive\Documents\HMS_WFK_Final\{}_CompiledRiverStationData_{}.json'.format(JSON_name_ext,date), "w") as outfile:
     outfile.write(json_object)
