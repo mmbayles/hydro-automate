@@ -57,7 +57,7 @@ reach_station_lookup = {}
 for reach in range(len(hms_reach)):
     reach_station_lookup[f'{hms_reach[reach]}'] = ras_station[reach]
 key_station = ras_station
-hms_reach = reaches
+reaches = hms_reach
 
 #PULL EXPERIMENTAL DATA FROM DSS VUE; SWAP HMS REACH FOR RAS STATION IDENTIFIER
 #2 year data
