@@ -19,7 +19,7 @@ if list_files.returncode == 0:
 
     time.sleep(2)
     if list_files.returncode == 0:
-        #STEP3: extract each HMS reach time series data from output .dss file, save to .txt files
+        #STEP3: extract each HMS reach time series data from output .dss file, compile to .json file
         list_files = subprocess.run("python CC_dss_output.py",cwd=r"C:\Users\paige\OneDrive\Documents\HMS_CC_Final")
         print("The exit code to run STEP3 was %d" %list_files.returncode)
 

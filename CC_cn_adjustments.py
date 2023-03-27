@@ -69,7 +69,7 @@ CC_CNs = CC_CNs_input.get_basin_CN_input() #this is a subbasin:CN dictionary
 #define function to calculate lag (as referenced in part 630.1502a Hydrology National Engineering Handbook; see above)
 def calcL(subbasin):
     S = (1000/CC_CNs[subbasin]) - 10
-    L = ((CC_params[subbasin][0]**0.8)*(S+1)**0.7)/(1900*CC_params[subbasin][1]**0.5)
+    L = (((CC_params[subbasin][0]**0.8)*(S+1)**0.7)/(1900*CC_params[subbasin][1]**0.5))*60
     return L
 
 #create dictionary of subbasins' calculated lag
